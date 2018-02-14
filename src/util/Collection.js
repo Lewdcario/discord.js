@@ -413,6 +413,24 @@ class Collection extends Map {
   }
 
   /**
+   * Checks for values present within both collections and returns a new one with those values.
+   * @param {Collection} collection the collection to compare against
+   * @returns {Collection}
+   */
+  intersect(collection) {
+    return collection.filter((v, k) => this.has(k));
+  }
+
+  /**
+   * Checks for values present within one of the collections and returns a new one with those values.
+   * @param {Collection} collection the collection to compare against
+   * @returns {Collection}
+   */
+  difference(collection) {
+    return collection.filter((v, k) => !this.has(k)).concat(this.filter((v, k) => !collection.has(k)));
+  }
+
+  /**
    * The sort() method sorts the elements of a collection and returns it.
    * The sort is not necessarily stable. The default sort order is according to string Unicode code points.
    * @param {Function} [compareFunction] Specifies a function that defines the sort order.
