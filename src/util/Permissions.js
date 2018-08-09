@@ -55,13 +55,10 @@ class Permissions {
    * @returns {Permissions} These permissions or new permissions if the instance is frozen.
    */
   add(...permissions) {
-    let total = 0;
-    for (let p = permissions.length - 1; p >= 0; p--) {
-      const perm = this.constructor.resolve(permissions[p]);
-      total |= perm;
+    if (Object.isFrozen(this)) {
+      return new this.constructor(this.bitfield | this.constructor.resolve(permissions));
     }
-    if (Object.isFrozen(this)) return new this.constructor(this.bitfield | total);
-    this.bitfield |= total;
+    this.bitfield |= this.constructor.resolve(permissions);
     return this;
   }
 
@@ -71,13 +68,10 @@ class Permissions {
    * @returns {Permissions} These permissions or new permissions if the instance is frozen.
    */
   remove(...permissions) {
-    let total = 0;
-    for (let p = permissions.length - 1; p >= 0; p--) {
-      const perm = this.constructor.resolve(permissions[p]);
-      total |= perm;
+    if (Object.isFrozen(this)) {
+      return new this.constructor(this.bitfield & ~this.constructor.resolve(permissions));
     }
-    if (Object.isFrozen(this)) return new this.constructor(this.bitfield & ~total);
-    this.bitfield &= ~total;
+    this.bitfield &= ~this.constructor.resolve(permissions);
     return this;
   }
 
